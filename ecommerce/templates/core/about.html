@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+{% load static %}
+{% load sepet_template_tag %}
+{% load widget_tweaks %}
+<html lang="tr">
+
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>PETROLİST - Online Mağaza</title>
+    <meta content="" name="description">
+    <meta content="" name="keywords">
+
+    <!-- Favicons -->
+    <link href="{% static 'img/favicon.png' %}" rel="icon">
+    <link href="{% static 'img/apple-touch-icon.png' %}" rel="apple-touch-icon">
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Raleway:300,300i,400,400i,500,500i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
+
+    <!-- Vendor CSS Files -->
+    <link href="{% static 'vendor/aos/aos.css' %}" rel="stylesheet">
+    <link href="{% static 'vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+    <link href="{% static 'vendor/bootstrap-icons/bootstrap-icons.css' %}" rel="stylesheet">
+    <link href="{% static 'vendor/boxicons/css/boxicons.min.css' %}" rel="stylesheet">
+    <link href="{% static 'vendor/glightbox/css/glightbox.min.css' %}" rel="stylesheet">
+    <link href="{% static 'vendor/remixicon/remixicon.css' %}" rel="stylesheet">
+    <link href="{% static 'vendor/swiper/swiper-bundle.min.css' %}" rel="stylesheet">
+
+    <!-- Template Main CSS File -->
+    <link href="{% static 'css/style.css' %}" rel="stylesheet">
+</head>
+
+<body>
+    <!-- ======= Header ======= -->
+    <header id="header" class="fixed-top d-flex align-items-center">
+        <div class="container">
+            <div class="header-container d-flex align-items-center justify-content-between">
+                <div class="logo">
+                    <h1 class="text-light"><a href="{% url 'index' %}"><span>PETROLİST</span></a></h1>
+                </div>
+                <nav id="navbar" class="navbar">
+                    <ul>
+                        {% if user.is_authenticated %}
+                        <li><a class="nav-link scrollto active" href="{% url 'index' %}">Ana Sayfa</a></li>
+                        <li><a class="nav-link scrollto active" href="{% url 'siparis_listesi' %}">Sepet&nbsp;&nbsp;<div style="color:red;">{{ request.user|sepet_item_count }}</div></a></li>
+                        {% if user.is_superuser %}
+                        <li><a class="nav-link scrollto active" href="{% url 'urun_ekle' %}">Ürün Ekle</a></li>
+                        {% endif %}
+                        <li><a class="nav-link scrollto" href="#hero">Hoş Geldiniz {{ user.username }}</a></li>
+                        <li><a class="getstarted scrollto" href="{% url 'oturum_kapat' %}">Oturumu Kapat</a></li>
+                        {% else %}
+                        <li><a class="getstarted scrollto" href="{% url 'oturum_ac' %}">Oturum Aç</a></li>
+                        <li><a class="getstarted scrollto" href="{% url 'kayit_ol' %}">Kayıt Ol</a></li>
+                        {% endif %}
+                    </ul>
+                    <i class="bi bi-list mobile-nav-toggle"></i>
+                </nav><!-- .navbar -->
+            </div><!-- End Header Container -->
+        </div>
+    </header><!-- End Header -->
+
+    <!-- Main Content -->
+    <main id="main" class="mt-5 pt-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-6">
+                    <h2>{{ title }}</h2>
+                    <h3>{{ message }}</h3>
+                    <p>Merhaba ve hoş geldiniz!</p>
+                    <p>Biz PETROLİST, benzin istasyonları için malzemeler tedarik eden güvenilir bir çevrimiçi platformuz. Müşterilerimize yüksek kaliteli ürünler sunarken, hızlı ve güvenilir bir alışveriş deneyimi yaşatmayı amaçlıyoruz.</p>
+                    <p>Misyonumuz, benzin istasyonlarının işletme ihtiyaçlarını karşılamak için geniş bir ürün yelpazesi sunmak ve onların işlerini daha verimli hale getirmelerine yardımcı olmaktır. Müşteri memnuniyetini her zaman ön planda tutuyor ve iş ortaklarımızla uzun vadeli ilişkiler kurmayı hedefliyoruz.</p>
+                    <p>Farklı ihtiyaçlara uygun çözümler sunmak için sürekli olarak ürün portföyümüzü genişletiyor ve güncelliyoruz. Kalite standartlarına uygun ürünleri rekabetçi fiyatlarla sunarak müşterilerimizin güvenini kazanıyoruz.</p>
+                    <p>Ekibimiz, sektörde uzun yıllara dayanan deneyime sahip profesyonellerden oluşuyor. Her biri, müşteri odaklı hizmet anlayışımızı desteklemek ve iş ortaklarımıza en iyi hizmeti sunmak için çalışıyor.</p>
+                    <p>Siz değerli müşterilerimize ve iş ortaklarımıza teşekkür ederiz. PETROLİST olarak, sizlere en iyi hizmeti sunmak için her zaman buradayız.</p>
+                    <p>İletişime geçmek veya daha fazla bilgi almak için lütfen bizimle iletişime geçmekten çekinmeyin. Teşekkür ederiz!</p>
+                    <p>Saygılarımızla,</p>
+                    <p>[PETROLİST]</p>
+                </div>
+                <div class="col-sm-5 px-0 d-none d-sm-block">
+                    <img src="{% static 'img/cta-bg.jpg' %}" alt="login_image" class="img-fluid">
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="{% static 'vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+</body>
+</html>

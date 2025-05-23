@@ -1,0 +1,32 @@
+# Django ve temel paketler
+Django==5.0.4
+python-dotenv==1.0.1
+django-environ==0.12.0
+
+# Form ve template paketleri
+django-widget-tweaks==1.5.0
+django-countries==7.5.1
+
+# Medya ve statik dosya işleme
+Pillow==10.2.0
+
+# Güvenlik
+django-cors-headers==4.3.1
+
+# Ödeme işlemleri
+stripe==8.4.0
+
+# Geliştirme araçları
+django-debug-toolbar==4.3.0
+
+# Veritabanı
+psycopg2-binary==2.9.9
+
+# Test araçları
+pytest==8.0.2
+pytest-django==4.8.0
+
+# Kod kalitesi
+black==24.2.0
+flake8==7.0.0
+isort==5.13.2 

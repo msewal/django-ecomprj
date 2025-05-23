@@ -1,0 +1,65 @@
+{% extends 'core/layout.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Sepetim</h2>
+    
+    {% if items %}
+    <div class="table-responsive">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Ürün</th>
+                    <th>Fiyat</th>
+                    <th>Adet</th>
+                    <th>Toplam</th>
+                    <th>İşlemler</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in items %}
+                <tr>
+                    <td>
+                        <img src="{{ item.urun.resim.url }}" alt="{{ item.urun.isim }}" style="width: 50px;">
+                        {{ item.urun.isim }}
+                    </td>
+                    <td>{{ item.urun.fiyat }} TL</td>
+                    <td>
+                        <form action="{% url 'core:sepet_guncelle' item.id %}" method="POST" class="d-inline">
+                            {% csrf_token %}
+                            <input type="number" name="quantity" value="{{ item.adet }}" min="1" max="{{ item.urun.stok }}" class="form-control form-control-sm" style="width: 70px;">
+                            <button type="submit" class="btn btn-sm btn-info">Güncelle</button>
+                        </form>
+                    </td>
+                    <td>{{ item.urun.fiyat|multiply:item.adet }} TL</td>
+                    <td>
+                        <form action="{% url 'core:sepet_sil' item.id %}" method="POST" class="d-inline">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-sm btn-danger">Sil</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="3" class="text-end"><strong>Toplam:</strong></td>
+                    <td><strong>{{ total }} TL</strong></td>
+                    <td></td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+
+    <div class="text-end mt-3">
+        <a href="{% url 'core:odeme_kontrol' %}" class="btn btn-primary">Ödemeye Geç</a>
+    </div>
+    {% else %}
+    <div class="alert alert-info">
+        Sepetinizde ürün bulunmamaktadır.
+        <a href="{% url 'core:urun_listesi' %}" class="alert-link">Alışverişe başlayın</a>
+    </div>
+    {% endif %}
+</div>
+{% endblock %} 

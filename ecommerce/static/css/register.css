@@ -1,0 +1,72 @@
+/* Temel Arka Plan ve Metin Stilleri */
+body {
+    background-color: #f8f9fa; /* Açık gri beyaz arası bir renk */
+    color: #333; /* Koyu gri metin rengi */
+    font-family: 'Arial', sans-serif; /* Yazı tipi */
+}
+
+/* Login Bölümü Konteynır Stilleri */
+.login-section-wrapper {
+    padding-top: 8vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Login Kutusu Stilleri */
+.login-wrapper {
+    background-color: white;
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    width: 100%;
+    max-width: 400px;
+}
+
+/* Başlık Stilleri */
+.login-title {
+    color: #178555; /* Nil yeşili başlık */
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+/* Form Stilleri */
+.form-group {
+    margin-bottom: 15px;
+}
+
+/* Input Stilleri */
+.form-control {
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    padding: 10px;
+    width: 100%;
+}
+
+.form-control:focus {
+    border-color: #178555; /* Focus halinde nil yeşili çerçeve */
+    box-shadow: 0 0 0 2px rgba(23, 133, 85, 0.25);
+}
+
+/* Buton Stilleri */
+.login-btn {
+    background-color: #178555; /* Nil yeşili buton */
+    color: white;
+    border: none;
+    padding: 10px;
+    width: 100%;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+.login-btn:hover {
+    background-color: #156945; /* Butona tıklandığında koyulaşan yeşil */
+}
+
+/* Mesaj Stilleri */
+.alert {
+    text-align: center;
+    padding: 10px;
+    margin-bottom: 20px;
+}

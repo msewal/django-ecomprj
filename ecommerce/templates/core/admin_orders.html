@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+{% load static %}
+{% load widget_tweaks %}
+<html lang="tr">
+
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <title>PETROLİST - Siparişler</title>
+  <link href="{% static 'img/favicon.png' %}" rel="icon">
+  <link href="{% static 'img/apple-touch-icon.png' %}" rel="apple-touch-icon">
+  <link href="{% static 'vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+  <link href="{% static 'css/style.css' %}" rel="stylesheet">
+</head>
+
+<body>
+  <div class="container mt-5">
+    <h1>Siparişler</h1>
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>Sipariş ID</th>
+          <th>Kullanıcı</th>
+          <th>Toplam Fiyat</th>
+          <th>Sipariş Tarihi</th>
+          <th>Detaylar</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for siparis in siparisler %}
+        <tr>
+          <td>{{ siparis.order_id }}</td>
+          <td>{{ siparis.user.username }}</td>
+          <td>{{ siparis.get_total_price }}</td>
+          <td>{{ siparis.ordered_date }}</td>
+          <td><a href="{% url 'admin_order_details' siparis.pk %}" class="btn btn-primary">Görüntüle</a></td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</body>
+
+</html>

@@ -1,0 +1,122 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block title %}Ana Sayfa - Petrolist{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero bg-primary text-white py-5 mb-5">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-md-6">
+                <h1 class="display-4 fw-bold">Kaliteli Ürünler, Uygun Fiyatlar</h1>
+                <p class="lead">Petrolist ile güvenilir alışverişin keyfini çıkarın.</p>
+                <a href="{% url 'product_page' %}" class="btn btn-light btn-lg">Alışverişe Başla</a>
+            </div>
+            <div class="col-md-6">
+                <img src="{% static 'images/hero-image.jpg' %}" alt="Hero Image" class="img-fluid rounded">
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Categories Section -->
+<section class="categories mb-5">
+    <div class="container">
+        <h2 class="text-center mb-4">Kategoriler</h2>
+        <div class="row">
+            {% for kategori in kategoriler %}
+            <div class="col-md-4 mb-4">
+                <div class="card h-100">
+                    <div class="card-body text-center">
+                        <h5 class="card-title">{{ kategori.isim }}</h5>
+                        <a href="{% url 'product_page' %}?kategori={{ kategori.pk }}" class="btn btn-outline-primary">Ürünleri Gör</a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- Featured Products Section -->
+<section class="featured-products mb-5">
+    <div class="container">
+        <h2 class="text-center mb-4">Öne Çıkan Ürünler</h2>
+        <div class="row">
+            {% for urun in urunler %}
+            <div class="col-md-3 mb-4">
+                <div class="card h-100">
+                    {% if urun.resim %}
+                    <img src="{{ urun.resim.url }}" class="card-img-top" alt="{{ urun.isim }}">
+                    {% else %}
+                    <img src="{% static 'images/no-image.jpg' %}" class="card-img-top" alt="No Image">
+                    {% endif %}
+                    <div class="card-body">
+                        <h5 class="card-title">{{ urun.isim }}</h5>
+                        <p class="card-text text-truncate">{{ urun.aciklama }}</p>
+                        <p class="card-text fw-bold">{{ urun.fiyat }} TL</p>
+                        <div class="d-grid gap-2">
+                            <a href="{% url 'urun_ayrinti' urun.pk %}" class="btn btn-primary">Detaylar</a>
+                            {% if user.is_authenticated %}
+                            <a href="{% url 'sepete_ekle' urun.pk %}" class="btn btn-outline-primary">Sepete Ekle</a>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- Features Section -->
+<section class="features mb-5">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4 mb-4">
+                <div class="text-center">
+                    <i class="fas fa-truck fa-3x text-primary mb-3"></i>
+                    <h4>Hızlı Teslimat</h4>
+                    <p>Siparişleriniz en kısa sürede kapınızda.</p>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="text-center">
+                    <i class="fas fa-shield-alt fa-3x text-primary mb-3"></i>
+                    <h4>Güvenli Ödeme</h4>
+                    <p>256-bit SSL sertifikası ile güvenli alışveriş.</p>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="text-center">
+                    <i class="fas fa-headset fa-3x text-primary mb-3"></i>
+                    <h4>7/24 Destek</h4>
+                    <p>Müşteri hizmetlerimiz her zaman yanınızda.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Newsletter Section -->
+<section class="newsletter bg-light py-5">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-8 text-center">
+                <h3>Bültenimize Abone Olun</h3>
+                <p>Yeni ürünler ve kampanyalardan haberdar olun.</p>
+                <form method="post" action="{% url 'subscribe_newsletter' %}" class="row g-3 justify-content-center">
+                    {% csrf_token %}
+                    <div class="col-md-8">
+                        <input type="email" name="email" class="form-control" placeholder="E-posta adresiniz" required>
+                    </div>
+                    <div class="col-md-4">
+                        <button type="submit" class="btn btn-primary w-100">Abone Ol</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %} 

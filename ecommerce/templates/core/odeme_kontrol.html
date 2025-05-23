@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="tr">
+
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>PETROLİST - Ödeme Onayı</title>
+    <link href="{% static 'img/favicon.png' %}" rel="icon">
+    <link href="{% static 'img/apple-touch-icon.png' %}" rel="apple-touch-icon">
+    <link href="{% static 'vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+    <link href="{% static 'css/style.css' %}" rel="stylesheet">
+    <script src="https://js.stripe.com/v3/"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const stripe = Stripe("{{ stripe_public_key }}"); // Pass the Stripe public key from your view context
+            const checkoutButton = document.getElementById("checkout");
+
+            checkoutButton.addEventListener("click", function(e) {
+                e.preventDefault();
+                fetch("{% url 'create_checkout_session' order.id %}", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "X-CSRFToken": "{{ csrf_token }}",
+                    },
+                })
+                .then(response => response.json())
+                .then(data => {
+                    return stripe.redirectToCheckout({ sessionId: data.id });
+                })
+                .then(result => {
+                    if (result.error) {
+                        alert(result.error.message);
+                    }
+                })
+                .catch(error => {
+                    console.error("Error:", error);
+                });
+            });
+        });
+    </script>
+</head>
+
+<body>
+    <header id="header" class="fixed-top d-flex align-items-center">
+        <div class="container">
+            <div class="header-container d-flex align-items-center justify-content-between">
+                <div class="logo">
+                    <h1 class="text-light"><a href="{% url 'index' %}"><span>PETROLİST</span></a></h1>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main id="main" class="mt-5 pt-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-6 login-section-wrapper">
+                    <div class="login-wrapper my-auto">
+                        <h1 class="login-title">Ödeme Kontrol</h1>
+                        {% if messages %}
+                            {% for message in messages %}
+                                <h1 class="login-title badge badge-light" style="color:red;">{{ message }}</h1>
+                            {% endfor %}
+                        {% endif %}
+                        <form id="payment-form">
+                            {{ form.as_p }}
+                            <button id="checkout" class="btn btn-block login-btn btn-warning" type="submit">Ödemeyi Onayla</button>
+                        </form>
+                    </div>
+                </div>
+                <div class="col-sm-6 px-0 d-none d-sm-block">
+                    <img src="{% static 'img/cta-bg.jpg' %}" alt="login_image" class="login-img" style="width:100%; height:auto;">
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="{% static 'vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+</body>
+
+</html>

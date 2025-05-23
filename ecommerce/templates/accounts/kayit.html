@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>PETROLİST - Kayıt Ol</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: url('https://via.placeholder.com/1500') no-repeat center center fixed;
+            background-size: cover; /* Arka plan resmini ekranı kaplayacak şekilde ayarlar */
+        }
+        .form-container {
+            background-color: rgba(255, 255, 255, 0.8); /* Yarı saydam beyaz arkaplan */
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            max-width: 400px;
+            margin: auto;
+            margin-top: 50px;
+        }
+        .form-control:focus {
+            border-color: #178555; /* #178555 yeşili tonu */
+            box-shadow: 0 0 0 0.2rem rgba(23, 133, 85, 0.25);
+        }
+        .btn-custom {
+            background-color: #178555; /* #178555 yeşili */
+            border: none;
+            color: white;
+        }
+        .btn-custom:hover {
+            background-color: #116644; /* Daha koyu yeşil */
+        }
+        .btn-google {
+            background-color: #dd4b39; /* Google kırmızısı */
+            color: white; /* Beyaz yazı rengi */
+        }
+        .btn-google:hover {
+            background-color: #c23321; /* Koyu Google kırmızısı */
+        }
+        .alert-custom {
+            color: #721c24;
+            background-color: #f8d7da;
+            border-color: #f5c6cb;
+        }
+    </style>
+</head>
+<body>
+    <div class="form-container">
+        <form method="post">
+            {% csrf_token %}
+            {% if form.errors %}
+                <div class="alert alert-danger" role="alert">
+                    Girilen bilgilerde hatalar var! Lütfen kontrol ediniz.
+                </div>
+            {% endif %}
+            <div class="mb-3">
+                <label for="kullanici_adi" class="form-label">Kullanıcı Adı</label>
+                <input type="text" class="form-control" name="kullanici_adi" id="kullanici_adi" placeholder="Kullanıcı Adı" required>
+                {% if form.kullanici_adi.errors %}
+                    <div class="alert alert-custom">{{ form.kullanici_adi.errors }}</div>
+                {% endif %}
+            </div>
+            <div class="mb-3">
+                <label for="email" class="form-label">E-mail</label>
+                <input type="email" class="form-control" name="email" id="email" placeholder="E-mail" required>
+                {% if form.email.errors %}
+                    <div class="alert alert-custom">{{ form.email.errors }}</div>
+                {% endif %}
+            </div>
+            <div class="mb-3">
+                <label for="sifre" class="form-label">Şifre</label>
+                <input type="password" class="form-control" name="sifre" id="sifre" placeholder="Şifre" required>
+                {% if form.sifre.errors %}
+                    <div class="alert alert-custom">{{ form.sifre.errors }}</div>
+                {% endif %}
+            </div>
+            <div class="mb-3">
+                <label for="sifre_tekrar" class="form-label">Şifre (Tekrar)</label>
+                <input type="password" class="form-control" name="sifre_tekrar" id="sifre_tekrar" placeholder="Şifre (Tekrar)" required>
+                {% if form.sifre_tekrar.errors %}
+                    <div class="alert alert-custom">{{ form.sifre_tekrar.errors }}</div>
+                {% endif %}
+            </div>
+            <div class="mb-3">
+                <label for="tel_no" class="form-label">Telefon Numarası</label>
+                <input type="text" class="form-control" name="tel_no" id="tel_no" placeholder="Telefon Numarası" required>
+                {% if form.tel_no.errors %}
+                    <div class="alert alert-custom">{{ form.tel_no.errors }}</div>
+                {% endif %}
+            </div>
+            <button type="submit" class="btn btn-custom">KAYIT OL</button>
+            <button type="button" class="btn btn-google">Google ile Kayıt Ol</button>
+        </form>
+    </div>
+</body>
+</html>

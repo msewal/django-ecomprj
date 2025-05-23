@@ -1,0 +1,162 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block title %}Ürünler - Petrolist{% endblock %}
+
+{% block content %}
+<div class="container">
+    <!-- Search and Filter Section -->
+    <div class="row mb-4">
+        <div class="col-md-8">
+            <form method="get" class="d-flex">
+                <input type="text" name="q" class="form-control me-2" placeholder="Ürün ara..." value="{{ request.GET.q }}">
+                <select name="kategori" class="form-select me-2" style="max-width: 200px;">
+                    <option value="">Tüm Kategoriler</option>
+                    {% for kategori in form.fields.kategori.queryset %}
+                    <option value="{{ kategori.pk }}" {% if request.GET.kategori == kategori.pk|stringformat:"i" %}selected{% endif %}>
+                        {{ kategori.isim }}
+                    </option>
+                    {% endfor %}
+                </select>
+                <button type="submit" class="btn btn-primary">Ara</button>
+            </form>
+        </div>
+        <div class="col-md-4 text-end">
+            <div class="btn-group">
+                <button type="button" class="btn btn-outline-primary active" data-view="grid">
+                    <i class="fas fa-th"></i>
+                </button>
+                <button type="button" class="btn btn-outline-primary" data-view="list">
+                    <i class="fas fa-list"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Products Grid View -->
+    <div class="row" id="products-grid">
+        {% for urun in urunler %}
+        <div class="col-md-3 mb-4">
+            <div class="card h-100">
+                {% if urun.resim %}
+                <img src="{{ urun.resim.url }}" class="card-img-top" alt="{{ urun.isim }}">
+                {% else %}
+                <img src="{% static 'images/no-image.jpg' %}" class="card-img-top" alt="No Image">
+                {% endif %}
+                <div class="card-body">
+                    <h5 class="card-title">{{ urun.isim }}</h5>
+                    <p class="card-text text-truncate">{{ urun.aciklama }}</p>
+                    <p class="card-text fw-bold">{{ urun.fiyat }} TL</p>
+                    <div class="d-grid gap-2">
+                        <a href="{% url 'urun_ayrinti' urun.pk %}" class="btn btn-primary">Detaylar</a>
+                        {% if user.is_authenticated %}
+                        <a href="{% url 'sepete_ekle' urun.pk %}" class="btn btn-outline-primary">Sepete Ekle</a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-12">
+            <div class="alert alert-info">
+                Aradığınız kriterlere uygun ürün bulunamadı.
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- Products List View (Hidden by default) -->
+    <div class="row d-none" id="products-list">
+        {% for urun in urunler %}
+        <div class="col-12 mb-4">
+            <div class="card">
+                <div class="row g-0">
+                    <div class="col-md-3">
+                        {% if urun.resim %}
+                        <img src="{{ urun.resim.url }}" class="img-fluid rounded-start h-100" alt="{{ urun.isim }}" style="object-fit: cover;">
+                        {% else %}
+                        <img src="{% static 'images/no-image.jpg' %}" class="img-fluid rounded-start h-100" alt="No Image" style="object-fit: cover;">
+                        {% endif %}
+                    </div>
+                    <div class="col-md-9">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ urun.isim }}</h5>
+                            <p class="card-text">{{ urun.aciklama }}</p>
+                            <p class="card-text fw-bold">{{ urun.fiyat }} TL</p>
+                            <div class="d-flex gap-2">
+                                <a href="{% url 'urun_ayrinti' urun.pk %}" class="btn btn-primary">Detaylar</a>
+                                {% if user.is_authenticated %}
+                                <a href="{% url 'sepete_ekle' urun.pk %}" class="btn btn-outline-primary">Sepete Ekle</a>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- Pagination -->
+    {% if urunler.has_other_pages %}
+    <nav aria-label="Page navigation" class="mt-4">
+        <ul class="pagination justify-content-center">
+            {% if urunler.has_previous %}
+            <li class="page-item">
+                <a class="page-link" href="?page={{ urunler.previous_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}{% if request.GET.kategori %}&kategori={{ request.GET.kategori }}{% endif %}">
+                    Önceki
+                </a>
+            </li>
+            {% endif %}
+
+            {% for num in urunler.paginator.page_range %}
+            {% if urunler.number == num %}
+            <li class="page-item active">
+                <span class="page-link">{{ num }}</span>
+            </li>
+            {% else %}
+            <li class="page-item">
+                <a class="page-link" href="?page={{ num }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}{% if request.GET.kategori %}&kategori={{ request.GET.kategori }}{% endif %}">
+                    {{ num }}
+                </a>
+            </li>
+            {% endif %}
+            {% endfor %}
+
+            {% if urunler.has_next %}
+            <li class="page-item">
+                <a class="page-link" href="?page={{ urunler.next_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}{% if request.GET.kategori %}&kategori={{ request.GET.kategori }}{% endif %}">
+                    Sonraki
+                </a>
+            </li>
+            {% endif %}
+        </ul>
+    </nav>
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const gridView = document.getElementById('products-grid');
+    const listView = document.getElementById('products-list');
+    const gridBtn = document.querySelector('[data-view="grid"]');
+    const listBtn = document.querySelector('[data-view="list"]');
+
+    gridBtn.addEventListener('click', function() {
+        gridView.classList.remove('d-none');
+        listView.classList.add('d-none');
+        gridBtn.classList.add('active');
+        listBtn.classList.remove('active');
+    });
+
+    listBtn.addEventListener('click', function() {
+        gridView.classList.add('d-none');
+        listView.classList.remove('d-none');
+        gridBtn.classList.remove('active');
+        listBtn.classList.add('active');
+    });
+});
+</script>
+{% endblock %} 

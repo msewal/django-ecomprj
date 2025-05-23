@@ -1,0 +1,56 @@
+{% extends "core/layout.html" %}
+<!DOCTYPE html>
+{% load static %}
+{% load sepet_template_tag %}
+{% load widget_tweaks %}
+<html lang="tr">
+
+{% block content %}
+<h3>{{ message }}</h3>
+
+<div class="footer-top">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-3 col-md-6 footer-contact">
+        <h3>PETROLİST</h3>
+        <p>
+          Yenibahar Mahallesi<br>
+          Ayçiçeği Sokak <br>
+          Bina No: 57 <br>
+          Sarıyer/İstanbul, İST 345022<br>
+          Türkiye <br><br>
+          <strong>Telefon:</strong> +90 555 123 45 67<br>
+          <strong>E-mail Adres:</strong> info@petrolist.com<br>
+        </p>
+      </div>
+
+      <div class="col-sm-6 px-0 d-none d-sm-block">
+        <img src="{% static 'img/cta-bg.jpg' %}" alt="login_image" class="login-img" style="width:100%; height:auto;">
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-lg-3 col-md-6">
+        <div class="me-md-auto text-center text-md-start">
+          <div class="copyright">
+            &copy; Copyright <strong><span>PETROLİST</span></strong>. Tüm Hakları Saklıdır
+          </div>
+          <address>
+            <strong>Destek:</strong> <a href="mailto:petrolist_destek@gmail.com">petrolist_destek@gmail.com</a><br>
+            <strong>Marketing:</strong> <a href="mailto:petrolist_marketing@gmail.com">petrolist_marketing@gmail.com</a>
+          </address>
+          <div class="credits">
+            Site Tasarımı <a href="#">powered by DJANGO</a>
+          </div>
+          <div class="social-links text-center text-md-right pt-18 pt-md-9">
+            <a href="https://twitter.com/Shell" class="twitter"><i class="bx bxl-twitter"></i></a>
+            <a href="https://facebook.com/Shell" class="facebook"><i class="bx bxl-facebook"></i></a>
+            <a href="https://instagram.com/Shell" class="instagram"><i class="bx bxl-instagram"></i></a>
+            <a href="https://www.shellgoplus.com/" class="google-plus"><i class="bx bxl-skype"></i></a>
+            <a href="https://www.linkedin.com/company/shell" class="linkedin"><i class="bx bxl-linkedin"></i></a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+{% load static %}
+{% load widget_tweaks %}
+<html lang="tr">
+
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <title>PETROLİST - Sipariş Detayları</title>
+  <link href="{% static 'img/favicon.png' %}" rel="icon">
+  <link href="{% static 'img/apple-touch-icon.png' %}" rel="apple-touch-icon">
+  <link href="{% static 'vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+  <link href="{% static 'css/style.css' %}" rel="stylesheet">
+</head>
+
+<body>
+  <div class="container mt-5">
+    <h1>Sipariş Detayları</h1>
+    <h2>Sipariş ID: {{ siparis.order_id }}</h2>
+    <h3>Kullanıcı: {{ siparis.user.username }}</h3>
+    <h3>Toplam Fiyat: {{ siparis.get_total_price }} TL</h3>
+    <h3>Sipariş Tarihi: {{ siparis.ordered_date }}</h3>
+
+    <h2>Sipariş Edilen Ürünler</h2>
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>Ürün Adı</th>
+          <th>Miktar</th>
+          <th>Fiyat</th>
+          <th>Toplam</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for item in siparis.items.all %}
+        <tr>
+          <td>{{ item.urun.name }}</td>
+          <td>{{ item.quantity }}</td>
+          <td>{{ item.urun.fiyat }}</td>
+          <td>{{ item.get_total_item_price }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</body>
+
+</html>

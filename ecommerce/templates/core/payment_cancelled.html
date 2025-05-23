@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="tr">
+
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>PETROLİST - Ödeme İptal!</title>
+    <link href="{% static 'img/favicon.png' %}" rel="icon">
+    <link href="{% static 'img/apple-touch-icon.png' %}" rel="apple-touch-icon">
+    <link href="{% static 'vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+    <link href="{% static 'css/style.css' %}" rel="stylesheet">
+    <script src="https://js.stripe.com/v3/"></script>
+</head>
+
+<body>
+    <header id="header" class="fixed-top d-flex align-items-center">
+        <div class="container">
+            <div class="header-container d-flex align-items-center justify-content-between">
+                <div class="logo">
+                    <h1 class="text-light"><a href="{% url 'index' %}"><span>PETROLİST</span></a></h1>
+                </div>
+                <nav id="navbar" class="navbar">
+                    <ul>
+                        {% if user.is_authenticated %}
+                        <li><a class="nav-link scrollto active" href="{% url 'index' %}">Ana Sayfa</a></li>
+                        <li><a class="nav-link scrollto active" href="{% url 'siparis_listesi' %}">Siparişler</a></li>
+                        {% if user.is_superuser %}
+                        <li><a class="nav-link scrollto active" href="{% url 'urun_ekle' %}">Ürün Ekle</a></li>
+                        {% endif %}
+                        <li><a class="nav-link scrollto" href="#">{{ user.username }}</a></li>
+                        <li><a class="getstarted scrollto" href="{% url 'oturum_kapat' %}">Oturumu Kapat</a></li>
+                        {% else %}
+                        <li><a class="getstarted scrollto" href="{% url 'oturum_ac' %}">Oturum Aç</a></li>
+                        <li><a class="getstarted scrollto" href="{% url 'kayit_ol' %}">Kayıt Ol</a></li>
+                        {% endif %}
+                    </ul>
+                    <i class="bi bi-list mobile-nav-toggle"></i>
+                </nav>
+            </div>
+        </div>
+    </header>
+    <main id="main" class="mt-5 pt-5">
+        <div class="container mt-5">
+            <h1>Ödeme İptal Edildi</h1>
+            <p>Ödeme işleminiz iptal edildi. Lütfen tekrar deneyin.</p>
+            <a href="{% url 'index' %}" class="btn btn-primary">Ana Sayfa</a>
+        </div>
+    </main>
+    <script src="{% static 'vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+</body>
+
+</html>

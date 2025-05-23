@@ -1,0 +1,385 @@
+{% extends 'core/layout.html' %}
+{% load static %}
+{% load sepet_template_tag %}
+{% load widget_tweaks %}
+
+{% block content %}
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <title>PETROLİST - Online Mağaza</title>
+  <meta content="" name="description">
+  <meta content="" name="keywords">
+
+  <!-- Favicons -->
+  <link href="{% static 'img/favicon.png' %}" rel="icon">
+  <link href="{% static 'img/apple-touch-icon.png' %}" rel="apple-touch-icon">
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Raleway:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
+
+  <!-- Vendor CSS Files -->
+  <link href="{% static 'vendor/aos/aos.css' %}" rel="stylesheet">
+  <link href="{% static 'vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+  <link href="{% static 'vendor/bootstrap-icons/bootstrap-icons.css' %}" rel="stylesheet">
+  <link href="{% static 'vendor/boxicons/css/boxicons.min.css' %}" rel="stylesheet">
+  <link href="{% static 'vendor/glightbox/css/glightbox.min.css' %}" rel="stylesheet">
+  <link href="{% static 'vendor/remixicon/remixicon.css' %}" rel="stylesheet">
+  <link href="{% static 'vendor/swiper/swiper-bundle.min.css' %}" rel="stylesheet">
+
+  <!-- Template Main CSS File -->
+  <link href="{% static 'css/style.css' %}" rel="stylesheet">
+</head>
+
+<body>
+
+  <!-- ======= Header ======= -->
+  <header id="header" class="fixed-top d-flex align-items-center">
+    <div class="container d-flex align-items-center justify-content-between">
+      <div class="logo">
+        <h1 class="text-light"><a href="{% url 'index' %}"><span>PETROLİST</span></a></h1>
+      </div>
+      
+      <nav id="navbar" class="navbar">
+        <ul>
+          {% if user.is_authenticated %}
+          <li><a class="nav-link scrollto active" href="{% url 'product_page' %}">Mağaza</a></li>
+          <li><a class="nav-link scrollto active" href="{% url 'siparis_listesi' %}">Sepet&nbsp;&nbsp;<div style="color:red;">{{ request.user|sepet_item_count }}</div></a></li>
+          {% if user.is_superuser %}
+          <li><a class="nav-link scrollto active" href="{% url 'admin_page' %}">Yönetici Paneli</a></li>
+          <li><a class="nav-link scrollto active" href="{% url 'urun_ekle' %}">Ürün Ekle</a></li>
+          {% endif %}
+          <li><a class="nav-link scrollto" href="#hero">Hoş Geldiniz {{ user.username }}</a></li>
+          <li><a class="getstarted scrollto" href="{% url 'oturum_kapat' %}">Oturumu Kapat</a></li>
+          {% else %}
+          <li><a class="getstarted scrollto" href="{% url 'oturum_ac' %}">Oturum Aç</a></li>
+          <li><a class="getstarted scrollto" href="{% url 'kayit_ol' %}">Kayıt Ol</a></li>
+          {% endif %}
+        </ul>
+        <i class="bi bi-list mobile-nav-toggle"></i>
+      </nav><!-- .navbar -->
+    </div>
+  </header><!-- End Header -->
+
+  <!-- ======= Hero Section ======= -->
+  <section id="hero" class="d-flex align-items-center">
+    <div class="container text-center position-relative" data-aos="fade-in" data-aos-delay="200">
+      <h1>PETROLİST size online istasyon marketinden alışveriş yapabilme imkanı sunar</h1>
+      <h2>7/24 Hizmetinizdeyiz</h2>
+      <a href="#about" class="btn-get-started scrollto">Alışverişe Başlarken</a>
+    </div>
+  </section><!-- End Hero -->
+
+  <main id="main">
+
+    {% if messages %}
+    {% for message in messages %}
+    <h1 class="login-title" style="color:#00db8b;text-align:center;">{{ message }}</h1>
+    {% endfor %}
+    {% endif %}
+
+    <!-- Ürün Arama ve Filtreleme Formu -->
+    <section id="search" class="search mt-3">
+      <div class="container">
+        <form method="GET" action="{% url 'index' %}" class="row g-3">
+          <div class="col-md-6">
+            {{ form.query|add_class:"form-control" }}
+          </div>
+          <div class="col-md-4">
+            {{ form.kategori|add_class:"form-control" }}
+          </div>
+          <div class="col-md-2">
+            <button type="submit" class="btn btn-primary w-100">Ara</button>
+          </div>
+        </form>
+      </div>
+    </section><!-- End Search Section -->
+
+    <!-- ======= Why Us Section ======= -->
+    <section id="why-us" class="why-us">
+      <div class="container">
+        <div class="row">
+          {% for urun in urunler %}
+          <div class="col-lg-4 d-flex align-items-stretch mb-3" data-aos="fade-right">
+            <div class="card">
+              <img src="{{ urun.resim.url }}" class="card-img-top" alt="{{ urun.name }}" style="width: 100%; height: auto; max-height: 200px; object-fit: cover;" />
+              <div class="card-body">
+                <h4 class="card-title">{{ urun.name }}</h4>
+                <p class="card-text">{{ urun.desc }}</p>
+                <p class="card-text"><b>Fiyat:</b> {{ urun.fiyat }} TL</p>
+                <p class="card-text"><b>Kategori:</b> {{ urun.kategori.kategori_ismi }}</p>
+              </div>
+              <div class="card-footer text-center">
+                <a href="{% url 'core:urun_ayrinti' urun.pk %}" class="btn btn-dark">Ayrıntılar</a>
+              </div>
+            </div>
+          </div>
+          {% empty %}
+          <div class="col-lg-12 text-center">
+            <p>Ürün bulunamadı.</p>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+    </section><!-- End Why Us Section -->
+
+    <!-- ======= Portfolio Section ======= -->
+<section id="portfolio" class="portfolio">
+  <div class="container">
+    <div class="section-title" data-aos="fade-left">
+      <h2>Ürünlerimiz</h2>
+    </div>
+
+    <div class="row" data-aos="fade-up" data-aos-delay="100">
+      <div class="col-lg-12 d-flex justify-content-center">
+        <ul id="portfolio-flters">
+          <li data-filter="*" class="filter-active" onclick="filterSelection('all')">Tümü</li>
+          {% for kategori in kategoriler %}
+          <li data-filter=".filter-{{ kategori.kategori_ismi|lower }}" onclick="filterSelection('{{ kategori.kategori_ismi|lower }}')">{{ kategori.kategori_ismi }}</li>
+          {% endfor %}
+        </ul>
+      </div>
+    </div>
+
+    <div class="row portfolio-container" data-aos="fade-up" data-aos-delay="200">
+      {% for urun in urunler %}
+      <div class="col-lg-4 col-md-6 portfolio-item filter-{{ urun.kategori.kategori_ismi|lower }}">
+        <div class="portfolio-wrap">
+          <img src="{{ urun.resim.url }}" class="img-fluid" alt="{{ urun.name }}">
+          <div class="portfolio-info">
+            <h4>{{ urun.name }}</h4>
+            <p>{{ urun.kategori.kategori_ismi }}</p>
+            <div class="portfolio-links">
+              <a href="{{ urun.resim.url }}" data-gallery="portfolioGallery" class="portfolio-lightbox" title="{{ urun.name }}"><i class="bx bx-plus"></i></a>
+              <a href="{% url 'core:urun_ayrinti' urun.pk %}" title="Daha Fazla"><i class="bx bx-link"></i></a>
+            </div>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section><!-- End Portfolio Section -->
+
+
+    <!-- ======= Clients Section ======= -->
+    <section id="clients" class="clients">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-2 col-md-4 col-6 d-flex align-items-center" data-aos="zoom-in" data-aos-delay="100">
+            <img src="{% static 'img/clients/client-1.png' %}" class="img-fluid" alt="">
+          </div>
+          <div class="col-lg-2 col-md-4 col-6 d-flex align-items-center" data-aos="zoom-in" data-aos-delay="200">
+            <img src="{% static 'img/clients/client-2.png' %}" class="img-fluid" alt="">
+          </div>
+          <div class="col-lg-2 col-md-4 col-6 d-flex align-items-center" data-aos="zoom-in" data-aos-delay="300">
+            <img src="{% static 'img/clients/client-3.png' %}" class="img-fluid" alt="">
+          </div>
+          <div class="col-lg-2 col-md-4 col-6 d-flex align-items-center" data-aos="zoom-in" data-aos-delay="400">
+            <img src="{% static 'img/clients/client-4.png' %}" class="img-fluid" alt="">
+          </div>
+          <div class="col-lg-2 col-md-4 col-6 d-flex align-items-center" data-aos="zoom-in" data-aos-delay="500">
+            <img src="{% static 'img/clients/client-5.png' %}" class="img-fluid" alt="">
+          </div>
+          <div class="col-lg-2 col-md-4 col-6 d-flex align-items-center" data-aos="zoom-in" data-aos-delay="600">
+            <img src="{% static 'img/clients/client-6.png' %}" class="img-fluid" alt="">
+          </div>
+        </div>
+      </div>
+    </section><!-- End Clients Section -->
+
+    <!-- ======= About Section ======= -->
+    <section id="about" class="about">
+      <div class="container">
+        <div class="row content">
+          <div class="col-lg-6" data-aos="fade-right" data-aos-delay="100">
+            <h2>Güvenli Alışveriş İçin Bizi Tercih Ediniz</h2>
+            <h3>PETROLİST - Bir Online İstasyon Marketi</h3>
+          </div>
+          <div class="col-lg-6 pt-4 pt-lg-0" data-aos="fade-left" data-aos-delay="200">
+            <p>Sadece akaryakıt istasyonlarına toptan tedarik sağlamakla kalmıyoruz. Evinize, işyerinize, inşaat bölgelerine ... Kısacası sizin bulunduğunuz her yere, her zaman ...</p>
+            <ul>
+              <li><i class="ri-check-double-line"></i> Hızlı</li>
+              <li><i class="ri-check-double-line"></i> Güvenilir</li>
+              <li><i class="ri-check-double-line"></i> Hesaplı</li>
+            </ul>
+            <p class="fst-italic">... bir benzin istasyonu marketinden ihtiyacınız olabilecek her şeyi ayağınıza getiririz.</p>
+          </div>
+        </div>
+      </div>
+    </section><!-- End About Section -->
+
+    <!-- ======= Counts Section ======= -->
+    <section id="counts" class="counts">
+      <div class="container">
+        <div class="row counters">
+          <div class="col-lg-3 col-6 text-center">
+            <span data-purecounter-start="0" data-purecounter-end="232" data-purecounter-duration="1" class="purecounter"></span>
+            <p>Ürün Çeşitliliği</p>
+          </div>
+          <div class="col-lg-3 col-6 text-center">
+            <span data-purecounter-start="0" data-purecounter-end="21521" data-purecounter-duration="1" class="purecounter"></span>
+            <p>Bugüne Kadar Sitemizden Yapılan Alışveriş Sayısı</p>
+          </div>
+          <div class="col-lg-3 col-6 text-center">
+            <span data-purecounter-start="0" data-purecounter-end="1463" data-purecounter-duration="1" class="purecounter"></span>
+            <p>İstasyona Toptan Tedarik</p>
+          </div>
+          <div class="col-lg-3 col-6 text-center">
+            <span data-purecounter-start="0" data-purecounter-end="8" data-purecounter-duration="1" class="purecounter"></span>
+            <p>Yıl Online Alışverişte Lider Firma</p>
+          </div>
+        </div>
+      </div>
+    </section><!-- End Counts Section -->
+
+    <!-- ======= Cta Section ======= -->
+    <section id="cta" class="cta">
+      <div class="container">
+        <div class="text-center" data-aos="zoom-in">
+          <h3>İstasyon Marketle Alakalı Herhangi Bir Sorunuz/Sorununuz Olduğunda</h3>
+          <p>Bize Her Zaman Ulaşabilirsiniz.</p>
+          <a class="cta-btn" href="{% url 'core:mesaj' %}">Bize Ulaşın</a>
+        </div>
+      </div>
+    </section><!-- End Cta Section -->
+    <!-- ... -->
+
+  </main><!-- End #main -->
+
+  <!-- ======= Footer ======= -->
+  <footer id="footer">
+    <div class="footer-top">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-3 col-md-6 footer-contact">
+            <h3>PETROLİST</h3>
+            <p>
+              Yenibahar Mahallesi<br>
+              Ayçiçeği Sokak <br>
+              Bina No: 57 <br>
+              Sarıyer/İstanbul, İST 345022<br>
+              Türkiye <br><br>
+              <strong>Telefon:</strong> +90 555 123 45 67<br>
+              <address>
+                <strong>Destek:</strong> <a href="mailto:support@petrolist.com">support@petrolist.com</a><br>
+                <strong>Marketing:</strong> <a href="mailto:marketing@petrolist.com">marketing@petrolist.com</a>
+              </address>
+            </p>
+          </div>
+          
+          <div class="col-lg-2 col-md-6 footer-links">
+            <h4>Site Linkleri</h4>
+            <ul>
+              <li><i class="bx bx-chevron-right"></i> <a href="{% url 'index' %}">Ana Sayfa</a></li>
+              <li><i class="bx bx-chevron-right"></i> <a href="{% url 'about' %}">Hakkımızda</a></li>
+              <li><i class="bx bx-chevron-right"></i> <a href="{% url 'hizmet' %}">Hizmetlerimiz</a></li>
+              <li><i class="bx bx-chevron-right"></i> <a href="{% url 'hizmet_sartlari' %}">Hizmet Şartları</a></li>
+              <li><i class="bx bx-chevron-right"></i> <a href="{% url 'gizlilik_politikasi' %}">Gizlilik Politikası</a></li>
+            </ul>
+          </div>
+
+          <div class="col-lg-3 col-md-6 footer-links">
+            <h4>Hizmetlerimiz</h4>
+            <ul>
+              <li><i class="bx bx-chevron-right"></i> <a href="#">Tüm Ürünlerimiz</a></li>
+              <li><i class="bx bx-chevron-right"></i> <a href="#">Tank Temizliği</a></li>
+              <li><i class="bx bx-chevron-right"></i> <a href="#">İstasyon Bakımı</a></li>
+            </ul>
+          </div>
+
+          <div class="col-lg-4 col-md-6 footer-newsletter">
+            <h4>Bültenimize Katılın</h4>
+            <p>En yeni gelişmelerden anında haberiniz olsun.</p>
+            <form action="{% url 'core:bulten_abonelik' %}" method="post">
+                {% csrf_token %}
+                <input type="email" name="email" placeholder="Email adresiniz" required>
+                <button type="submit" class="btn btn-warning">Abone Ol</button>
+            </form>
+        </div>
+        
+
+        </div>
+      </div>
+    </div>
+
+    <div class="container d-md-flex py-4">
+      <div class="me-md-auto text-center text-md-start">
+        <div class="copyright">
+          &copy; Copyright <strong><span>PETROLİST</span></strong>. Tüm Hakları Saklıdır
+        </div>
+        <div class="credits">
+          <!-- All the links in the footer should remain intact. -->
+          <!-- You can delete the links only if you purchased the pro version. -->
+          <!-- Licensing information: https://bootstrapmade.com/license/ -->
+          <!-- Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/PETROLİST-free-onepage-bootstrap-theme/ -->
+          Site Tasarımı <a href="{'PETROLİST Tarafından Hazırlanmıştır'}">powered by DJANGO</a>
+        </div>
+      </div>
+      <div class="social-links text-center text-md-right pt-3 pt-md-0">
+        <a href="(% 'https://twitter.com/Shell' %)" class="twitter"><i class="bx bxl-twitter"></i></a>
+        <a href="(% 'https://facebook.com/Shell' %)" class="facebook"><i class="bx bxl-facebook"></i></a>
+        <a href="(% 'https://instagram.com/Shell' %)" class="instagram"><i class="bx bxl-instagram"></i></a>
+        <a href="(% 'https://www.shellgoplus.com/' %)" class="google-plus"><i class="bx bxl-skype"></i></a>
+        <a href="(% 'https://www.linkedin.com/company/shell' %)" class="linkedin"><i class="bx bxl-linkedin"></i></a>
+      </div>
+    </div>
+  </footer><!-- End Footer -->
+
+  <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+
+  <!-- Vendor JS Files -->
+  <script src="{% static 'vendor/purecounter/purecounter_vanilla.js' %}"></script>
+  <script src="{% static 'vendor/aos/aos.js' %}"></script>
+  <script src="{% static 'vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+  <script src="{% static 'vendor/glightbox/js/glightbox.min.js' %}"></script>
+  <script src="{% static 'vendor/isotope-layout/isotope.pkgd.min.js' %}"></script>
+  <script src="{% static 'vendor/swiper/swiper-bundle.min.js' %}"></script>
+  <script src="{% static 'vendor/php-email-form/validate.js' %}"></script>
+  <!-- Template Main JS File -->
+  <script src="{% static 'js/main.js' %}"></script>
+  <!-- JavaScript for Filtering -->
+  <script>
+    function filterSelection(category) {
+      var x, i;
+      x = document.getElementsByClassName("portfolio-item");
+      if (category == "all") category = "";
+      for (i = 0; i < x.length; i++) {
+        filterRemoveClass(x[i], "filter-active");
+        if (x[i].className.indexOf(category) > -1) filterAddClass(x[i], "filter-active");
+      }
+    }
+
+    function filterAddClass(element, name) {
+      var arr1, arr2;
+      arr1 = element.className.split(" ");
+      arr2 = name.split(" ");
+      for (var i = 0; i < arr2.length; i++) {
+        if (arr1.indexOf(arr2[i]) == -1) {
+          element.className += " " + arr2[i];
+        }
+      }
+    }
+
+    function filterRemoveClass(element, name) {
+      var arr1, arr2;
+      arr1 = element.className.split(" ");
+      arr2 = name.split(" ");
+      for (var i = 0; i < arr2.length; i++) {
+        while (arr1.indexOf(arr2[i]) > -1) {
+          arr1.splice(arr1.indexOf(arr2[i]), 1);
+        }
+      }
+      element.className = arr1.join(" ");
+    }
+  </script>
+  
+
+  
+</body>
+
+</html>
+{% endblock %}

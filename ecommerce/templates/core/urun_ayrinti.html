@@ -1,0 +1,58 @@
+{% extends 'core/layout.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-6">
+            <img src="{{ urun.resim.url }}" class="img-fluid" alt="{{ urun.isim }}">
+        </div>
+        <div class="col-md-6">
+            <h1>{{ urun.isim }}</h1>
+            <p class="lead">{{ urun.aciklama }}</p>
+            <p class="h3">Fiyat: {{ urun.fiyat }} TL</p>
+            <p>Stok: {{ urun.stok }}</p>
+            
+            <form action="{% url 'core:sepete_ekle' urun.pk %}" method="POST">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-primary">Sepete Ekle</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Yorumlar Bölümü -->
+    <div class="row mt-5">
+        <div class="col-12">
+            <h3>Yorumlar</h3>
+            
+            <!-- Yorum Formu -->
+            {% if user.is_authenticated %}
+            <form action="{% url 'core:yorum_ekle' urun.pk %}" method="POST">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button type="submit" class="btn btn-primary">Yorum Yap</button>
+            </form>
+            {% else %}
+            <p>Yorum yapmak için <a href="{% url 'login' %}">giriş yapın</a>.</p>
+            {% endif %}
+
+            <!-- Mevcut Yorumlar -->
+            {% for yorum in urun.yorumlar.all %}
+            <div class="card mb-3">
+                <div class="card-body">
+                    <h5 class="card-title">{{ yorum.kullanici.username }}</h5>
+                    <p class="card-text">{{ yorum.yorum }}</p>
+                    <p class="card-text"><small class="text-muted">Puan: {{ yorum.puan }}/5</small></p>
+                    
+                    {% if yorum.admin_reply %}
+                    <div class="admin-reply">
+                        <p class="text-muted">Admin Yanıtı: {{ yorum.admin_reply }}</p>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}

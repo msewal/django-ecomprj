@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="tr">
+
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <title>PETROLİST - Siparişlerim</title>
+  <link href="{% static 'img/favicon.png' %}" rel="icon">
+  <link href="{% static 'img/apple-touch-icon.png' %}" rel="apple-touch-icon">
+  <link href="{% static 'vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+  <link href="{% static 'css/style.css' %}" rel="stylesheet">
+</head>
+
+<body>
+  <div class="container mt-5">
+    <h1>Bekleyen Siparişlerim</h1>
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>Sipariş ID</th>
+          <th>Onay Durumu</th>
+          <th>Sipariş Tarihi</th>
+        </tr>
+      </thead>      
+      <tbody>   
+        {% if onayBekleyen %}  
+          {% for siparis in onayBekleyen %}
+          <tr>
+            <td>{{ siparis.id }}</td>
+            <td>Beklemede</td>
+            <td>{{ siparis.ordered_date }}</td>
+          </tr>
+          {% endfor %}
+        {% else %}
+        <tr>
+          <td>Henüz beklemede olan bir siparişiniz yok!</td>
+        </tr>       
+        {% endif %}
+      </tbody>
+    </table>
+  </div>
+  <div class="container mt-5">
+    <h1>Aktif Siparişlerim</h1>
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>Sipariş ID</th>
+          <th>Toplam Fiyat</th>
+          <th>Sipariş Tarihi</th>
+          <th>Durum</th>
+          <th>Detaylar</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for siparis in siparisler %}
+        <tr>
+          <td>{{ siparis.id }}</td>
+          <td>{{ siparis.get_total_price }}</td>
+          <td>{{ siparis.ordered_date }}</td>
+          {% if siparis.order_received == False %}
+          <td>Teslim Edilmedi</td>
+          {% else %}
+          <td>Teslim Edildi</td>
+          {% endif %}
+          <td><a href="{% url 'siparis_detay' siparis.pk %}" class="btn btn-primary">Görüntüle</a></td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</body>
+
+</html>

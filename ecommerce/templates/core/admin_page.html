@@ -1,0 +1,74 @@
+{% extends 'core/layout.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Admin Paneli</h2>
+    
+    <div class="row mt-4">
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Siparişler</h5>
+                    <p class="card-text">Toplam Sipariş: {{ total_orders }}</p>
+                    <a href="{% url 'core:admin_orders' %}" class="btn btn-primary">Siparişleri Görüntüle</a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Ürünler</h5>
+                    <p class="card-text">Toplam Ürün: {{ total_products }}</p>
+                    <a href="{% url 'core:urun_ekle' %}" class="btn btn-primary">Yeni Ürün Ekle</a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Yorumlar</h5>
+                    <p class="card-text">Toplam Yorum: {{ yorumlar.count }}</p>
+                    <a href="{% url 'core:admin_yorumlar' %}" class="btn btn-primary">Yorumları Görüntüle</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-4">
+        <div class="col-12">
+            <h3>Son Siparişler</h3>
+            <div class="table-responsive">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Sipariş No</th>
+                            <th>Müşteri</th>
+                            <th>Tutar</th>
+                            <th>Durum</th>
+                            <th>Tarih</th>
+                            <th>İşlemler</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for siparis in recent_orders %}
+                        <tr>
+                            <td>{{ siparis.siparis_no }}</td>
+                            <td>{{ siparis.kullanici.username }}</td>
+                            <td>{{ siparis.toplam_tutar }} TL</td>
+                            <td>{{ siparis.durum }}</td>
+                            <td>{{ siparis.created_at|date:"d.m.Y H:i" }}</td>
+                            <td>
+                                <a href="{% url 'core:admin_order_details' siparis.pk %}" class="btn btn-sm btn-info">Detay</a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

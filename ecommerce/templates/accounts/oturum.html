@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>PETROLİST - Oturum Aç</title>
+    <!-- Bootstrap CSS (CDN linki eklendi) -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        body {
+            background-color: #f8f9fa; /* Açık arka plan rengi */
+            color: #178555; /* Metin rengi */
+        }
+        .login-section-wrapper {
+            padding-top: 8vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .login-wrapper {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            width: 100%;
+            max-width: 400px;
+        }
+        .login-btn {
+            background-color: #178555; /* Düğme rengi */
+            color: white;
+        }
+        .login-btn:hover {
+            background-color: #156945; /* Düğme hover rengi */
+        }
+    </style>
+</head>
+<body>
+    <main>
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-6 login-section-wrapper">
+                    <div class="login-wrapper my-auto">
+                        <h1 class="login-title">Oturum Aç</h1>
+                        {% if messages %}
+                        {% for message in messages %}
+                        <div class="alert alert-warning" role="alert">
+                            {{ message }}
+                        </div>
+                        {% endfor %}
+                        {% endif %}
+                        <form method="post">
+                            {% csrf_token %}
+                            <div class="form-group">
+                                <label for="kullanici_adi">Kullanıcı Adı</label>
+                                <input type="text" name="kullanici_adi" id="kullanici_adi" class="form-control">
+                            </div>
+                            <div class="form-group mb-4">
+                                <label for="sifre">Şifre</label>
+                                <input type="password" name="sifre" id="sifre" class="form-control">
+                            </div>
+                            <input name="oturum" id="oturum" class="btn btn-block login-btn" type="submit" value="OTURUM AÇ">
+                            
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+</body>
+</html>

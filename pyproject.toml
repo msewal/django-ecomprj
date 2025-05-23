@@ -1,0 +1,44 @@
+[tool.poetry]
+name = "django-ecomprj"
+version = "0.1.0"
+description = "Django E-commerce Project"
+authors = ["msewal <meleksevvalerdogan@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+django = "^5.0.4"
+python-dotenv = "^1.0.1"
+django-environ = "^0.12.0"
+django-widget-tweaks = "^1.5.0"
+django-countries = "^7.5.1"
+pillow = "^10.2.0"
+django-cors-headers = "^4.3.1"
+stripe = "^8.4.0"
+django-debug-toolbar = "^4.3.0"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^8.0.2"
+pytest-django = "^4.8.0"
+black = "^24.2.0"
+flake8 = "^7.0.0"
+isort = "^5.13.2"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.black]
+line-length = 88
+target-version = ['py311']
+include = '\.pyi?$'
+
+[tool.isort]
+profile = "black"
+multi_line_output = 3
+line_length = 88
+
+[tool.pytest.ini_options]
+DJANGO_SETTINGS_MODULE = "ecommerce.settings"
+python_files = ["test_*.py", "*_test.py"]
+addopts = "-v --cov=ecommerce" 
